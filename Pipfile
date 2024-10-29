@@ -11,6 +11,7 @@ greenlet = "*"
 pydantic = "*"
 pydantic-settings = "*"
 uvicorn = "*"
+asyncpg = "*"
 
 [dev-packages]
 black = "*"
