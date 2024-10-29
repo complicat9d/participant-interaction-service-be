@@ -1,0 +1,16 @@
+[tool.black]
+target-version = ['py310']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | data
+  | .venv
+  | alembic
+)
+'''
+
+[tool.isort]
+profile = "black"
+py_version = 310
+skip_gitignore = true
