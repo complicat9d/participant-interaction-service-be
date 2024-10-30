@@ -1,3 +1,4 @@
+import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,6 +10,8 @@ class Settings(BaseSettings):
     DATABASE_USER: str
     DATABASE_PASSWORD: str
     DATABASE_DB: str
+
+    PFP_PATH: str = os.getcwd() + "/data/pfp/"
 
     DEBUG_ENGINE: bool = False
 

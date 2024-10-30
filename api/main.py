@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, APIRouter, Response, Request, status
 from contextlib import asynccontextmanager
 
+from api.client import client_router
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -43,8 +45,9 @@ async def debug_exception_handler(request: Request, exc: Exception):
 
 
 router = APIRouter(prefix="/api")
-app.include_router(router)
 
+router.include_router(client_router, prefix="/clients")
+app.include_router(router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

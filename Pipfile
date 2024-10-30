@@ -12,6 +12,10 @@ pydantic = "*"
 pydantic-settings = "*"
 uvicorn = "*"
 asyncpg = "*"
+pillow = "*"
+python-multipart = "*"
+bcrypt = "==4.0.1"
+passlib = "*"
 
 [dev-packages]
 black = "*"
