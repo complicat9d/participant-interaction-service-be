@@ -14,3 +14,4 @@ class Client(Base):
     gender: Gender = sa.Column(sa.String, server_default=Gender.PREFER_NOT_TO_SAY)
     first_name = sa.Column(sa.String, nullable=False)
     last_name = sa.Column(sa.String, nullable=False)
+    registration_date = sa.Column(sa.DateTime, server_default=sa.func.now())

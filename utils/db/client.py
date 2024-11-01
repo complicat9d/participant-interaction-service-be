@@ -4,7 +4,7 @@ from fastapi_mail.errors import ConnectionErrors
 from datetime import datetime
 
 import database.models as m
-from schemas import ClientCreationSchema, ClientSchema
+from schemas import ClientCreationSchema, ClientSchema, Gender, SortType
 from schemas.exception import (
     IncorrectEmailFormatException,
     ReactionsAmountExceededException,
@@ -113,3 +113,35 @@ async def leave_reaction(
                         client.email, recipient.email, e
                     )
                 )
+
+
+async def get_clients_filtered(
+    session: AsyncSession,
+    first_name: str = None,
+    last_name: str = None,
+    gender: Gender = None,
+    from_date: datetime = None,
+    until_date: datetime = None,
+    sort_by_date: SortType = None,
+):
+    q = sa.select(m.Client.__table__)
+
+    if gender is not None:
+        q = q.where(m.Client.gender == gender)
+    if first_name is not None:
+        q = q.where(m.Client.first_name == first_name)
+    if last_name is not None:
+        q = q.where(m.Client.last_name == last_name)
+    if from_date is not None:
+        q = q.where(m.Client.registration_date >= from_date)
+    if until_date is not None:
+        q = q.where(m.Client.registration_date <= until_date)
+    if sort_by_date is not None:
+        if sort_by_date == SortType.ASC:
+            q = q.order_by(m.Client.registration_date.asc())
+        else:
+            q = q.order_by(m.Client.registration_date.desc())
+
+    entities = (await session.execute(q)).mappings().all()
+    if entities:
+        return [ClientSchema(**entity) for entity in entities]
