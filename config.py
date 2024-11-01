@@ -11,7 +11,11 @@ class Settings(BaseSettings):
     DATABASE_PASSWORD: str
     DATABASE_DB: str
 
+    JWT_SECRET: str
+    TOKEN_EXPIRATION_DELTA: int = 10
+
     PFP_PATH: str = os.getcwd() + "/data/pfp/"
+    REACTIONS_LIMIT: int = 5
 
     DEBUG_ENGINE: bool = False
 

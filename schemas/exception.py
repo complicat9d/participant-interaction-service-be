@@ -19,3 +19,7 @@ IncorrectEmailFormatException = HTTPException(
     status_code=status.HTTP_404_NOT_FOUND,
     detail="Incorrect format of email",
 )
+
+ClientAuthenticationFailedException = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED, detail="Client could not be authenticated"
+)

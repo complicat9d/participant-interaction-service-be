@@ -16,6 +16,7 @@ pillow = "*"
 python-multipart = "*"
 bcrypt = "==4.0.1"
 passlib = "*"
+pyjwt = "*"
 
 [dev-packages]
 black = "*"

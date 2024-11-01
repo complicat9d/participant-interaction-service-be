@@ -1,11 +1,20 @@
 from fastapi import Depends
-from typing import Annotated
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from typing import Annotated, Optional
 from pydantic import BaseModel
+from jwt.exceptions import PyJWTError
 
 from database.session import SessionDep
 from utils.hash import hasher
-from utils.db.client import get_email_and_password
-from schemas.exception import IncorrectPasswordException
+from utils.db.client import get_client, get_client_by_email
+from utils.jwt import decode_token
+from schemas.client import ClientSchema
+from schemas.exception import (
+    IncorrectPasswordException,
+    ClientNotFoundException,
+    ClientAuthenticationFailedException,
+)
+from schemas.security import TokenData
 
 
 class AuthScheme(BaseModel):
@@ -14,20 +23,33 @@ class AuthScheme(BaseModel):
     password: str
 
 
-class APIAuthentication:
-    async def __call__(
-        self, email: str, password: str, session: SessionDep
-    ) -> AuthScheme:
-        result = await get_email_and_password(email, session)
-        if result:
-            email, user_password = result[0]
-            if not hasher.verify_password(password, user_password):
-                raise IncorrectPasswordException
-            return AuthScheme(is_new=False, password=password, email=email)
-
-        return AuthScheme(is_new=True, password=password, email=email)
+oauth2_dep = Annotated[str, Depends(OAuth2PasswordBearer(tokenUrl="api/clients/login"))]
+oauth2_form_dep = Annotated[OAuth2PasswordRequestForm, Depends()]
 
 
-schema = APIAuthentication()
+async def authenticate(
+    email: str, password: str, session: SessionDep
+) -> Optional[ClientSchema]:
+    user = await get_client_by_email(email, session)
+    if user is None:
+        raise ClientNotFoundException
+    if not hasher.verify_password(password, user.password):
+        raise IncorrectPasswordException
 
-Auth = Annotated[APIAuthentication, Depends(schema)]
+    return user
+
+
+async def get_current_client(token: oauth2_dep, session: SessionDep) -> ClientSchema:
+    try:
+        payload = decode_token(token)
+        if payload:
+            data = TokenData(**payload)
+            return await get_client(data.sub, session)
+        else:
+            raise ClientAuthenticationFailedException
+
+    except PyJWTError:
+        raise ClientAuthenticationFailedException
+
+
+client_dep = Annotated[ClientSchema, Depends(get_current_client)]

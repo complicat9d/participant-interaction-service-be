@@ -7,7 +7,8 @@ from schemas import Gender
 class Client(Base):
     __tablename__ = "client"
 
-    email = sa.Column(sa.String, primary_key=True)
+    id = sa.Column(sa.Integer, primary_key=True)
+    email = sa.Column(sa.String, nullable=False, unique=True)
     password = sa.Column(sa.String, nullable=False)
     pfp = sa.Column(sa.String, nullable=True)
     gender: Gender = sa.Column(sa.String, server_default=Gender.PREFER_NOT_TO_SAY)
