@@ -8,4 +8,3 @@ COPY ./Pipfile* ./
 RUN pipenv install --deploy --system --clear
 
 COPY . .
-CMD ["python", "api/main.py"]
