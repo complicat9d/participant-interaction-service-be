@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from typing import Optional, Union
 
 from database.session import session_dep
-from schemas import ClientCreationSchema, Gender, ClientSchema
+from schemas import ClientCreationSchema, Gender
 from schemas.security import TokenResponse
 from schemas.exception import ClientAlreadyExistsException
 from utils.db.client import create_client, leave_reaction
@@ -29,6 +29,8 @@ async def create(
     first_name: str = Form(...),
     last_name: str = Form(...),
     gender: Gender = Form(None),
+    longitude: float = Form(...),
+    latitude: float = Form(...),
     file: Optional[Union[UploadFile, str]] = None,
 ):
     output_path = None
@@ -46,6 +48,8 @@ async def create(
         last_name=last_name,
         email=email,
         password=hasher.get_password_hash(password),
+        latitude=latitude,
+        longitude=longitude,
     )
     try:
         client_id = await create_client(request, session)
@@ -63,11 +67,6 @@ async def login(form: oauth2_form_dep, session: session_dep):
         email=form.username, password=form.password, session=session
     )
     return TokenResponse(access_token=create_jwt_access_token(user.id))
-
-
-@client_router.get("", response_model=Optional[ClientSchema])
-async def get(client: client_dep):
-    return client
 
 
 @client_router.post("/{id}/match", status_code=status.HTTP_200_OK)

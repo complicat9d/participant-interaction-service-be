@@ -15,3 +15,5 @@ class Client(Base):
     first_name = sa.Column(sa.String, nullable=False)
     last_name = sa.Column(sa.String, nullable=False)
     registration_date = sa.Column(sa.DateTime, server_default=sa.func.now())
+    latitude = sa.Column(sa.Double, nullable=False)
+    longitude = sa.Column(sa.Double, nullable=False)

@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Optional
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class Gender(str, Enum):
@@ -16,6 +17,9 @@ class ClientCreationSchema(BaseModel):
     last_name: str
     email: str
     password: str
+    latitude: float
+    longitude: float
+    registration_date: datetime
 
 
 class ClientSchema(ClientCreationSchema):

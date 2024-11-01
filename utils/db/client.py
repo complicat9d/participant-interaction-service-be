@@ -8,8 +8,10 @@ from schemas import ClientCreationSchema, ClientSchema, Gender, SortType
 from schemas.exception import (
     IncorrectEmailFormatException,
     ReactionsAmountExceededException,
+    IncorrectCoordinatesFormatException,
 )
 from utils.email_utils import is_valid_email, send_message
+from utils.math_utils import haversine
 from utils.log import logger
 from config import settings
 
@@ -17,6 +19,9 @@ from config import settings
 async def create_client(request: ClientCreationSchema, session: AsyncSession) -> int:
     if not is_valid_email(request.email):
         raise IncorrectEmailFormatException
+
+    if not (-180 <= request.longitude <= 180) and not (-90 <= request.latitude <= 90):
+        raise IncorrectCoordinatesFormatException
 
     q = (
         sa.insert(m.Client)
@@ -28,6 +33,8 @@ async def create_client(request: ClientCreationSchema, session: AsyncSession) ->
                 m.Client.last_name: request.last_name,
                 m.Client.email: request.email,
                 m.Client.password: request.password,
+                m.Client.latitude: request.latitude,
+                m.Client.longitude: request.longitude,
             }
         )
         .returning(m.Client.id)
@@ -117,12 +124,14 @@ async def leave_reaction(
 
 async def get_clients_filtered(
     session: AsyncSession,
+    client: ClientSchema,
     first_name: str = None,
     last_name: str = None,
     gender: Gender = None,
     from_date: datetime = None,
     until_date: datetime = None,
     sort_by_date: SortType = None,
+    distance: float = None,
 ):
     q = sa.select(m.Client.__table__)
 
@@ -144,4 +153,13 @@ async def get_clients_filtered(
 
     entities = (await session.execute(q)).mappings().all()
     if entities:
+        if distance:
+            return [
+                ClientSchema(**entity)
+                for entity in entities
+                if haversine(
+                    client.latitude, client.longitude, entity.latitude, entity.longitude
+                )
+                <= distance
+            ]
         return [ClientSchema(**entity) for entity in entities]

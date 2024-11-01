@@ -1,14 +1,16 @@
 import uvicorn
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, APIRouter, Response, status, Query
+from fastapi import FastAPI, APIRouter, Response, status, Query, Request
 from contextlib import asynccontextmanager
 from typing import List, Optional
 from datetime import datetime
 
 from database.session import session_dep
+from utils.auth import client_dep
 from utils.db.client import get_clients_filtered
 from schemas import ClientSchema, Gender, SortType
+from schemas.exception import InvalidDateRangeException
 
 from api.client import client_router
 
@@ -40,7 +42,7 @@ async def health_check():
 
 
 @app.exception_handler(Exception)
-async def debug_exception_handler(exc: Exception):
+async def debug_exception_handler(request: Request, exc: Exception):
     import traceback
 
     return Response(
@@ -60,15 +62,28 @@ router = APIRouter(prefix="/api")
 )
 async def list_clients(
     session: session_dep,
+    client: client_dep,
     gender: Optional[Gender] = Query(None),
     first_name: Optional[str] = Query(None),
     last_name: Optional[str] = Query(None),
     from_date: Optional[datetime] = Query(None),
     until_date: Optional[datetime] = Query(None),
     sort_by_date: Optional[SortType] = Query(None),
+    distance: Optional[float] = Query(None),
 ):
+    if from_date >= until_date:
+        raise InvalidDateRangeException
+
     return await get_clients_filtered(
-        session, first_name, last_name, gender, from_date, until_date, sort_by_date
+        session,
+        client,
+        first_name,
+        last_name,
+        gender,
+        from_date,
+        until_date,
+        sort_by_date,
+        distance,
     )
 
 

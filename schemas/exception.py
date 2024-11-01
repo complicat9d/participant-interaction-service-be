@@ -28,3 +28,13 @@ ReactionsAmountExceededException = HTTPException(
     status_code=status.HTTP_403_FORBIDDEN,
     detail="Client has exceeded amount of reactions per day",
 )
+
+IncorrectCoordinatesFormatException = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+    detail="Incorrect format of either longitude or latitude",
+)
+
+InvalidDateRangeException = HTTPException(
+    status_code=status.HTTP_403_FORBIDDEN,
+    detail="Incorrect format: from_date must be strictly less, than until date",
+)
