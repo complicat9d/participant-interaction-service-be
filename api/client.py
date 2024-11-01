@@ -4,11 +4,11 @@ from fastapi import APIRouter, status, UploadFile, Form
 from sqlalchemy.exc import IntegrityError
 from typing import Optional, Union
 
-from database.session import SessionDep
+from database.session import session_dep
 from schemas import ClientCreationSchema, Gender, ClientSchema
 from schemas.security import TokenResponse
 from schemas.exception import ClientAlreadyExistsException
-from utils.db.client import create_client
+from utils.db.client import create_client, leave_reaction
 from utils.auth import authenticate, client_dep, oauth2_form_dep
 from utils.jwt import create_jwt_access_token
 from utils.hash import hasher
@@ -23,7 +23,7 @@ client_router = APIRouter(tags=["Client"])
     path="/create", status_code=status.HTTP_201_CREATED, response_model=TokenResponse
 )
 async def create(
-    session: SessionDep,
+    session: session_dep,
     email: str = Form(...),
     password: str = Form(...),
     first_name: str = Form(...),
@@ -58,7 +58,7 @@ async def create(
 
 
 @client_router.post("/login", response_model=TokenResponse, include_in_schema=False)
-async def login(form: oauth2_form_dep, session: SessionDep):
+async def login(form: oauth2_form_dep, session: session_dep):
     user = await authenticate(
         email=form.username, password=form.password, session=session
     )
@@ -68,3 +68,8 @@ async def login(form: oauth2_form_dep, session: SessionDep):
 @client_router.get("", response_model=Optional[ClientSchema])
 async def get(client: client_dep):
     return client
+
+
+@client_router.post("/{id}/match", status_code=status.HTTP_200_OK)
+async def rate_client(id: int, client: client_dep, session: session_dep):
+    await leave_reaction(client=client, liked_client_id=id, session=session)

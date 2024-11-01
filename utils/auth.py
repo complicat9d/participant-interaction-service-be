@@ -4,7 +4,7 @@ from typing import Annotated, Optional
 from pydantic import BaseModel
 from jwt.exceptions import PyJWTError
 
-from database.session import SessionDep
+from database.session import session_dep
 from utils.hash import hasher
 from utils.db.client import get_client, get_client_by_email
 from utils.jwt import decode_token
@@ -28,7 +28,7 @@ oauth2_form_dep = Annotated[OAuth2PasswordRequestForm, Depends()]
 
 
 async def authenticate(
-    email: str, password: str, session: SessionDep
+    email: str, password: str, session: session_dep
 ) -> Optional[ClientSchema]:
     user = await get_client_by_email(email, session)
     if user is None:
@@ -39,7 +39,7 @@ async def authenticate(
     return user
 
 
-async def get_current_client(token: oauth2_dep, session: SessionDep) -> ClientSchema:
+async def get_current_client(token: oauth2_dep, session: session_dep) -> ClientSchema:
     try:
         payload = decode_token(token)
         if payload:

@@ -23,3 +23,8 @@ IncorrectEmailFormatException = HTTPException(
 ClientAuthenticationFailedException = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED, detail="Client could not be authenticated"
 )
+
+ReactionsAmountExceededException = HTTPException(
+    status_code=status.HTTP_403_FORBIDDEN,
+    detail="Client has exceeded amount of reactions per day",
+)

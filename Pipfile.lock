@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b58aaa2664dd1c141b2c81fadfc637212de6decc016f9eaed7542b3b533c81ce"
+            "sha256": "cc4025fc5ad1466d475247d6a9182c4939c6cc0e1ff7c7c60d9cf563946aacda"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,6 +16,14 @@
         ]
     },
     "default": {
+        "aiosmtplib": {
+            "hashes": [
+                "sha256:138599a3227605d29a9081b646415e9e793796ca05322a78f69179f0135016a3",
+                "sha256:1e631a7a3936d3e11c6a144fb8ffd94bb4a99b714f2cb433e825d88b698e37bc"
+            ],
+            "markers": "python_version >= '3.7' and python_version < '4.0'",
+            "version": "==2.0.2"
+        },
         "alembic": {
             "hashes": [
                 "sha256:203503117415561e203aa14541740643a611f641517f0209fcae63e9fa09f1a2",
@@ -125,6 +133,14 @@
             "markers": "python_version >= '3.6'",
             "version": "==4.0.1"
         },
+        "blinker": {
+            "hashes": [
+                "sha256:1779309f71bf239144b9399d06ae925637cf6634cf6bd131104184531bf67c01",
+                "sha256:8f77b09d3bf7c795e969e9486f39c2c5e9c39d4ee07424be2bc594ece9642d83"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==1.8.2"
+        },
         "click": {
             "hashes": [
                 "sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28",
@@ -132,6 +148,22 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==8.1.7"
+        },
+        "dnspython": {
+            "hashes": [
+                "sha256:b4c34b7d10b51bcc3a5071e7b8dee77939f1e878477eeecc965e9835f63c6c86",
+                "sha256:ce9c432eda0dc91cf618a5cedf1a4e142651196bbcd2c80e89ed5a907e5cfaf1"
+            ],
+            "markers": "python_version >= '3.9'",
+            "version": "==2.7.0"
+        },
+        "email-validator": {
+            "hashes": [
+                "sha256:561977c2d73ce3611850a06fa56b414621e0c8faa9d66f2611407d87465da631",
+                "sha256:cb690f344c617a714f22e66ae771445a1ceb46821152df8e165c5f9a364582b7"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==2.2.0"
         },
         "fastapi": {
             "hashes": [
@@ -141,6 +173,15 @@
             "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==0.115.4"
+        },
+        "fastapi-mail": {
+            "hashes": [
+                "sha256:9095b713bd9d3abb02fe6d7abb637502aaf680b52e177d60f96273ef6bc8bb70",
+                "sha256:fa5ef23b2dea4d3ba4587f4bbb53f8f15274124998fb4e40629b3b636c76c398"
+            ],
+            "index": "pypi",
+            "markers": "python_full_version >= '3.8.1' and python_version < '4.0'",
+            "version": "==1.4.1"
         },
         "greenlet": {
             "hashes": [
@@ -237,6 +278,14 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==3.10"
+        },
+        "jinja2": {
+            "hashes": [
+                "sha256:4a3aee7acbbe7303aede8e9648d13b8bf88a429282aa6122a993f0ac800cb369",
+                "sha256:bc5dd2abb727a5319567b7a813e6a2e7318c39f4f487cfe6c89c6f9c7d25197d"
+            ],
+            "markers": "python_version >= '3.7'",
+            "version": "==3.1.4"
         },
         "mako": {
             "hashes": [
@@ -535,12 +584,12 @@
         },
         "python-multipart": {
             "hashes": [
-                "sha256:8dee37b88dab9b59922ca173c35acb627cc12ec74019f5cd4578369c6df36554",
-                "sha256:c2759b7b976ef3937214dfb592446b59dfaa5f04682a076f78b117c94776d87a"
+                "sha256:15dc4f487e0a9476cc1201261188ee0940165cffc94429b6fc565c4d3045cb5d",
+                "sha256:41330d831cae6e2f22902704ead2826ea038d0419530eadff3ea80175aec5538"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==0.0.16"
+            "version": "==0.0.17"
         },
         "sniffio": {
             "hashes": [

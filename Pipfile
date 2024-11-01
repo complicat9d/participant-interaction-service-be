@@ -17,6 +17,7 @@ python-multipart = "*"
 bcrypt = "==4.0.1"
 passlib = "*"
 pyjwt = "*"
+fastapi-mail = "*"
 
 [dev-packages]
 black = "*"

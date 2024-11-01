@@ -38,5 +38,5 @@ async def _get_async_session() -> AsyncSession:
 
 
 async_session_dep: AsyncSession = Depends(_get_async_session)
-SessionDep = Annotated[AsyncSession, async_session_dep]
+session_dep = Annotated[AsyncSession, async_session_dep]
 async_session = asynccontextmanager(_get_async_session)
