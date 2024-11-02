@@ -53,22 +53,3 @@ async def add_image_watermark(
             image_path,
             opacity,
         )
-
-
-async def main():
-    import os
-
-    input_image_path = os.path.join(
-        os.getcwd(), "data/pfp/Screenshot 2024-08-21 at 4.50.59 pm.png"
-    )
-    watermark_image_path = os.path.join(os.getcwd(), "data/watermark.png")
-
-    await add_image_watermark(
-        input_image_path,
-        watermark_image_path,
-        opacity=128,
-    )
-
-
-if __name__ == "__main__":
-    asyncio.run(main())

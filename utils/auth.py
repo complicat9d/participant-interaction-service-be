@@ -1,7 +1,6 @@
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from typing import Annotated, Optional
-from pydantic import BaseModel
 from jwt.exceptions import PyJWTError
 
 from database.session import session_dep
@@ -15,12 +14,6 @@ from schemas.exception import (
     ClientAuthenticationFailedException,
 )
 from schemas.security import TokenData
-
-
-class AuthScheme(BaseModel):
-    is_new: bool
-    email: str
-    password: str
 
 
 oauth2_dep = Annotated[str, Depends(OAuth2PasswordBearer(tokenUrl="api/clients/login"))]
